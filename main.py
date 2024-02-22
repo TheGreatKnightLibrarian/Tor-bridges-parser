@@ -8,6 +8,7 @@ def remove_useless_files():
         os.remove('bridges.txt')
         os.remove('ips.txt')
         os.remove('tor-node-list.txt')
+        os.remove('valid.txt')
         print('Готово')
     except (FileNotFoundError, FileExistsError):
         print('Безполезные файлы не найдены, продолжаем работу')
@@ -38,6 +39,7 @@ async def check_valid_ip(ip):
         print(f'{ip.strip()} работает.')
         with open('valid.txt', 'a', encoding='utf-8') as file:
             file.write(ip.strip() + '\n')
+        extract_valid_from_tor_node_list()
     except TimeoutError:
         print(ip.strip() + ' превышено время ожидания запроса')
 
@@ -60,7 +62,7 @@ def extract_valid_from_tor_node_list():
 
 remove_useless_files()
 parse_and_extract_ip()
-time.sleep(10)
+time.sleep(15)
 
 with open(r'ips.txt', 'r') as file:
     lines = file.readlines()
@@ -71,10 +73,9 @@ with open(r'valid.txt', 'w') as file:
 for ip in lines:
     with open('valid.txt', 'r', encoding='utf-8') as file:
         valid_lines = file.readlines()
-    if len(valid_lines) == 20: #здесь нужно написать количество мостов для парсинга, убери условие чтобы парсить все мосты
+    if len(valid_lines) == 5: # здесь нужно написать количество мостов для парсинга, убери условие чтобы парсить все мосты
         break
     else:
         asyncio.run(check_valid_ip(ip))
 
-extract_valid_from_tor_node_list()
 remove_useless_files()
