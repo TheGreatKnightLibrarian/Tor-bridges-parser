@@ -1,2 +1,2 @@
 # Tor-bridges-parser
-Ничего необычного, всего лишь утилита для парсинга и проверки на работоспособность Tor мостов.
+Nothing unusual, just a utility for parsing and checking the functionality of Tor bridges.
