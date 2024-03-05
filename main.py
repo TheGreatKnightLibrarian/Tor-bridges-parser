@@ -4,14 +4,14 @@ import time, requests, re, aioping, asyncio, wget, os, io
 
 def remove_useless_files():
     try:
-        print('Удаление безполезных файлов')
+        print('Removing useless files')
         os.remove('bridges.txt')
         os.remove('ips.txt')
         os.remove('tor-node-list.txt')
         os.remove('valid.txt')
-        print('Готово')
+        print('Completed')
     except (FileNotFoundError, FileExistsError):
-        print('Безполезные файлы не найдены, продолжаем работу')
+        print('No useless files were found, continue working')
 
 def parse_and_extract_ip():
     responce = requests.get('https://drew-phillips.com/tor-node-list.txt')
@@ -31,7 +31,7 @@ def parse_and_extract_ip():
     with open(r'ips.txt', 'a') as file:
         file.write(_ + '\n')
 
-    print('Данные получены. Начинается проверка на работоспособность мостов')
+    print('Data received. Testing for bridge functionality begins')
 
 async def check_valid_ip(ip):
     try:
@@ -41,7 +41,7 @@ async def check_valid_ip(ip):
             file.write(ip.strip() + '\n')
         extract_valid_from_tor_node_list()
     except TimeoutError:
-        print(ip.strip() + ' превышено время ожидания запроса')
+        print(ip.strip() + ' request timed out')
 
 def extract_valid_from_tor_node_list():
     with open(r'valid.txt', 'r') as ip_file:
@@ -57,7 +57,7 @@ def extract_valid_from_tor_node_list():
                         file.write(bridge[1] + ':' + bridge[2] + '\n' + bridge[4] + '\n')
 
 '''
-вызов функций
+calling functions
 '''
 
 remove_useless_files()
@@ -73,7 +73,7 @@ with open(r'valid.txt', 'w') as file:
 for ip in lines:
     with open('valid.txt', 'r', encoding='utf-8') as file:
         valid_lines = file.readlines()
-    if len(valid_lines) == 5: # здесь нужно написать количество мостов для парсинга, убери условие чтобы парсить все мосты
+    if len(valid_lines) == 5: # here you need to write the number of bridges for parsing, remove the condition to parse all bridges
         break
     else:
         asyncio.run(check_valid_ip(ip))
