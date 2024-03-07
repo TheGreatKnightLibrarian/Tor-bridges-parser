@@ -36,7 +36,7 @@ def parse_and_extract_ip():
 async def check_valid_ip(ip):
     try:
         delay = await aioping.ping(ip.strip(), timeout=1)
-        print(f'{ip.strip()} работает.')
+        print(f'{ip.strip()} works')
         with open('valid.txt', 'a', encoding='utf-8') as file:
             file.write(ip.strip() + '\n')
         extract_valid_from_tor_node_list()
