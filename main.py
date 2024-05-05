@@ -9,6 +9,7 @@ def remove_useless_files():
         os.remove('ips.txt')
         os.remove('tor-node-list.txt')
         os.remove('valid.txt')
+        os.remove('output.txt')
         print('Completed')
     except (FileNotFoundError, FileExistsError):
         print('No useless files were found, continue working')
@@ -55,6 +56,25 @@ def extract_valid_from_tor_node_list():
                     with open('output.txt', 'a', encoding='utf-8') as file:
                         file.write(bridge[1] + ':' + bridge[2] + '\n' + bridge[4] + '\n')
 
+def remove_duplicates():
+    with open('output.txt', 'r') as file:
+        lines = file.readlines()
+
+    wordList = []
+    badList = []
+
+    for line in lines:
+        if line in wordList:
+            badList.append(line)
+        else:
+            wordList.append(line)
+
+    with open('output_nodes.txt', 'w') as file:
+        for line in wordList:
+            file.write(line)
+
+    print('Dublicates has been removed')
+
 '''
 calling functions
 '''
@@ -78,4 +98,5 @@ for ip in lines:
         asyncio.run(check_valid_ip(ip))
 
 extract_valid_from_tor_node_list()
+remove_duplicates()
 remove_useless_files()
