@@ -39,7 +39,6 @@ async def check_valid_ip(ip):
         print(f'{ip.strip()} works')
         with open('valid.txt', 'a', encoding='utf-8') as file:
             file.write(ip.strip() + '\n')
-        extract_valid_from_tor_node_list()
     except TimeoutError:
         print(ip.strip() + ' request timed out')
 
@@ -78,4 +77,5 @@ for ip in lines:
     else:
         asyncio.run(check_valid_ip(ip))
 
+extract_valid_from_tor_node_list()
 remove_useless_files()
